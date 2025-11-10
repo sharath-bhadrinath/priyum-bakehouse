@@ -365,8 +365,21 @@ const Index = () => {
 
   const handleAddToCart = (product: Product, selectedWeight?: number, selectedPrice?: number, selectedUnit?: string) => {
     const price = selectedPrice || product.selling_price;
-    const weight = selectedWeight;
-    const unit = selectedUnit;
+    // Use selected weight/unit if provided, otherwise use product's base_weight and weight_unit
+    let weight = selectedWeight;
+    let unit = selectedUnit;
+    
+    // If no weight/unit selected, use product's base_weight and weight_unit
+    if (!weight && !unit) {
+      weight = product.base_weight || null;
+      unit = product.weight_unit || null;
+    }
+    
+    // For "piece" or "pieces" unit, if weight is null/undefined/0, set to 1
+    if (unit && (unit.toLowerCase() === 'piece' || unit.toLowerCase() === 'pieces') && (!weight || weight === 0)) {
+      weight = 1;
+    }
+    
     const categoryLower = (product.category || '').toLowerCase();
     const isBrownie = categoryLower.includes('brownie');
     const isEggless = categoryLower.includes('eggless');
@@ -530,6 +543,16 @@ const Index = () => {
           throw new Error(`Invalid product ID: ${productId}`);
         }
         
+        // Use selectedWeight/selectedUnit first, fallback to weight/weight_unit
+        // For "piece" or "pieces" unit, if weight is null/0, use 1 as default
+        const weight = item.selectedWeight ?? item.weight ?? null;
+        const weightUnit = item.selectedUnit ?? item.weight_unit ?? null;
+        
+        // Handle piece/pieces unit: if unit is piece/pieces and weight is null/0, set weight to 1
+        const finalWeight = (weightUnit && (weightUnit.toLowerCase() === 'piece' || weightUnit.toLowerCase() === 'pieces')) && (!weight || weight === 0)
+          ? 1
+          : weight;
+        
         return {
           order_id: order.id,
           product_id: productId,
@@ -537,8 +560,8 @@ const Index = () => {
           product_price: item.price,
           quantity: item.quantity,
           total: item.price * item.quantity,
-          weight: item.weight || null,
-          weight_unit: item.weight_unit || null
+          weight: finalWeight,
+          weight_unit: weightUnit
         };
       });
 
@@ -613,16 +636,23 @@ const Index = () => {
             </thead>
             <tbody>
               ${cartItems.map(item => {
+                // Remove weight from product name (format: "Product Name (120grams)" or "Product Name (Category) (120grams)")
+                // Only remove patterns with numbers followed by units (grams, kg, pieces, etc.)
+                // Preserve category patterns (text-only in parentheses)
+                const baseProductName = item.name.replace(/\s*\(\d+[^)]*(?:grams?|kg|pieces?|g|ml|l|oz|lb)[^)]*\)\s*$/i, '');
+                
                 // Format category name for display
                 const categoryDisplay = item.category ? 
                   item.category.split(' ').map(word => 
                     word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
                   ).join(' ') : '';
                 
-                // Create product name with category
-                const productNameWithCategory = categoryDisplay ? 
-                  `${item.name} (${categoryDisplay})` : 
-                  item.name;
+                // Create product name with category (without weight)
+                // Only add category if it's not already in the name
+                let productNameWithCategory = baseProductName;
+                if (categoryDisplay && !baseProductName.includes(`(${categoryDisplay})`)) {
+                  productNameWithCategory = `${baseProductName} (${categoryDisplay})`;
+                }
                 
                 return `
                 <tr>

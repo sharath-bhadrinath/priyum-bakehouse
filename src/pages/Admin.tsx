@@ -1483,15 +1483,22 @@ export default function Admin() {
               </tr>
             </thead>
             <tbody>
-              ${items.map(item => `
+              ${items.map(item => {
+                // Remove weight from product name (format: "Product Name (120grams)" or "Product Name (Category) (120grams)")
+                // Only remove patterns with numbers followed by units (grams, kg, pieces, etc.)
+                // Preserve category patterns (text-only in parentheses)
+                const baseProductName = item.product_name.replace(/\s*\(\d+[^)]*(?:grams?|kg|pieces?|g|ml|l|oz|lb)[^)]*\)\s*$/i, '');
+                
+                return `
                 <tr>
-                  <td style="padding: 6px; border-bottom: 1px solid #ddd;">${item.product_name}</td>
+                  <td style="padding: 6px; border-bottom: 1px solid #ddd;">${baseProductName}</td>
                   <td style="padding: 6px; border-bottom: 1px solid #ddd;">${item.weight ? `${item.weight} ${item.weight_unit}` : 'N/A'}</td>
                   <td style="padding: 6px; border-bottom: 1px solid #ddd;">${item.quantity}</td>
                   <td style="padding: 6px; border-bottom: 1px solid #ddd;">₹${roundPrice(item.product_price)}</td>
                   <td style="padding: 6px; border-bottom: 1px solid #ddd;">₹${roundPrice(item.total)}</td>
                 </tr>
-              `).join('')}
+              `;
+              }).join('')}
             </tbody>
           </table>
           
