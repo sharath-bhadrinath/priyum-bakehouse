@@ -352,15 +352,22 @@ const Landing = () => {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
         {categoryProducts.map((product) => {
+          // Parse weight_options if it's a string (similar to groupedProducts)
+          const processedProduct = {
+            ...product,
+            weight_options: typeof product.weight_options === 'string' 
+              ? JSON.parse(product.weight_options || '[]')
+              : product.weight_options || []
+          };
           const ProductCard = (
             <Card 
               className="group overflow-hidden hover:shadow-xl transition-all duration-300 bg-amber-50/80 backdrop-blur-sm border-amber-200/50 hover:scale-105 cursor-pointer touch-manipulation"
             >
-              {product.image && (
+              {processedProduct.image && (
                 <div className="overflow-hidden relative">
                   <img
-                    src={product.image}
-                    alt={product.name}
+                    src={processedProduct.image}
+                    alt={processedProduct.name}
                     className="w-full h-auto object-contain group-hover:scale-110 transition-transform duration-300"
                     loading="lazy"
                   />
@@ -369,17 +376,17 @@ const Landing = () => {
               )}
               <CardContent className="p-4 sm:p-6">
                 <h3 className="font-bold text-lg sm:text-xl mb-2 text-foreground group-hover:text-primary transition-colors line-clamp-2">
-                  {product.name}
+                  {processedProduct.name}
                 </h3>
-                {product.description && (
+                {processedProduct.description && (
                   <p className="text-sm text-muted-foreground mb-3 line-clamp-2 leading-relaxed">
-                    {product.description}
+                    {processedProduct.description}
                   </p>
                 )}
 
-                {productTagsMap[product.id] && productTagsMap[product.id].length > 0 && (
+                {productTagsMap[processedProduct.id] && productTagsMap[processedProduct.id].length > 0 && (
                   <div className="flex flex-wrap gap-1 mb-2">
-                    {productTagsMap[product.id].map(tag => (
+                    {productTagsMap[processedProduct.id].map(tag => (
                       <Badge
                         key={tag.id}
                         variant="outline"
@@ -401,23 +408,23 @@ const Landing = () => {
                     <div className="flex flex-col items-start">
                       <div className="flex flex-col items-start">
                         <Badge variant="secondary" className="text-base sm:text-lg font-bold px-3 py-1 bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-sm mb-1">
-                          {formatPrice(product.selling_price, product.base_weight || undefined, product.weight_unit || undefined)}
+                          {formatPrice(processedProduct.selling_price, processedProduct.base_weight || undefined, processedProduct.weight_unit || undefined)}
                         </Badge>
-                        {product.mrp > product.selling_price && (
+                        {processedProduct.mrp > processedProduct.selling_price && (
                           <div className="flex items-center gap-2">
                             <span className="text-sm text-gray-500">
-                              S.P.: <span className="line-through">₹{product.mrp}</span>
+                              S.P.: <span className="line-through">₹{processedProduct.mrp}</span>
                             </span>
                             <span className="text-xs text-green-600 font-medium">
-                              Save ₹{product.mrp - product.selling_price}
+                              Save ₹{processedProduct.mrp - processedProduct.selling_price}
                             </span>
                           </div>
                         )}
                       </div>
                     </div>
-                    {product.weight_options && Array.isArray(product.weight_options) && product.weight_options.length > 0 && (
+                    {processedProduct.weight_options && Array.isArray(processedProduct.weight_options) && processedProduct.weight_options.length > 0 && (
                       <Badge variant="outline" className="text-xs border-amber-300 text-amber-600 bg-amber-50">
-                        +{product.weight_options.length} sizes
+                        +{processedProduct.weight_options.length} sizes
                       </Badge>
                     )}
                   </div>
@@ -432,7 +439,7 @@ const Landing = () => {
                     <Button 
                       variant="outline" 
                       size="sm"
-                      onClick={(e) => { e.stopPropagation(); addToCart(product); }}
+                      onClick={(e) => { e.stopPropagation(); addToCart(processedProduct); }}
                       className="w-full"
                     >
                       <ShoppingCart className="w-3 h-3 mr-2" /> Add to Cart
@@ -445,13 +452,13 @@ const Landing = () => {
 
           // Use ProductQuickView for mobile, regular modal for desktop
           return (
-            <div key={product.id}>
+            <div key={processedProduct.id}>
               {/* Mobile: ProductQuickView */}
               <div className="sm:hidden">
                 <ProductQuickView 
-                  product={product} 
+                  product={processedProduct} 
                   contactInfo={contactInfo} 
-                  prefetchedTags={productTagsMap[product.id]}
+                  prefetchedTags={productTagsMap[processedProduct.id]}
                   onAddToCart={addToCart}
                 >
                   {ProductCard}
@@ -459,7 +466,7 @@ const Landing = () => {
               </div>
               
               {/* Desktop: Regular modal */}
-              <div className="hidden sm:block" onClick={() => handleProductClick(product)}>
+              <div className="hidden sm:block" onClick={() => handleProductClick(processedProduct)}>
                 {ProductCard}
               </div>
             </div>
@@ -751,8 +758,15 @@ const Landing = () => {
   };
   
   const addToCart = (product: Product) => {
+    // Parse weight_options if it's a string (similar to groupedProducts)
+    const processedProduct = {
+      ...product,
+      weight_options: typeof product.weight_options === 'string' 
+        ? JSON.parse(product.weight_options || '[]')
+        : product.weight_options || []
+    };
     // Open size selection dialog
-    setPendingProduct(product);
+    setPendingProduct(processedProduct);
     setIsSizeDialogOpen(true);
   };
 
@@ -840,7 +854,14 @@ const Landing = () => {
   };
 
   const handleProductClick = async (product: Product) => {
-    setSelectedProduct(product);
+    // Parse weight_options if it's a string (similar to groupedProducts)
+    const processedProduct = {
+      ...product,
+      weight_options: typeof product.weight_options === 'string' 
+        ? JSON.parse(product.weight_options || '[]')
+        : product.weight_options || []
+    };
+    setSelectedProduct(processedProduct);
     // Prefer prefetched map for instant render; fallback to fetch if missing
     const tags = productTagsMap[product.id];
     if (tags && tags.length > 0) {
