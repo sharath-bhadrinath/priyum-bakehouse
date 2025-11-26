@@ -8,7 +8,13 @@
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "backup:latest": "node scripts/backup-latest-records.js",
+    "restore:backup": "node scripts/restore-backup.js",
+    "migrate:apply": "node scripts/apply-migrations.js",
+    "migrate:combine": "node scripts/combine-migrations.js",
+    "auth:create-from-backup": "node scripts/create-auth-user-from-backup.js",
+    "migrate:shipment-number": "node scripts/apply-migration.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
