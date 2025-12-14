@@ -350,7 +350,7 @@ const Landing = () => {
     }
 
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
         {categoryProducts.map((product) => {
           // Parse weight_options if it's a string (similar to groupedProducts)
           const processedProduct = {
@@ -374,12 +374,12 @@ const Landing = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
               )}
-              <CardContent className="p-4 sm:p-6">
-                <h3 className="font-bold text-lg sm:text-xl mb-2 text-foreground group-hover:text-primary transition-colors line-clamp-2">
+              <CardContent className="p-3 sm:p-4 md:p-6">
+                <h3 className="font-bold text-sm sm:text-base md:text-lg lg:text-xl mb-1.5 sm:mb-2 text-foreground group-hover:text-primary transition-colors line-clamp-2">
                   {processedProduct.name}
                 </h3>
                 {processedProduct.description && (
-                  <p className="text-sm text-muted-foreground mb-3 line-clamp-2 leading-relaxed">
+                  <p className="text-xs sm:text-sm text-muted-foreground mb-2 sm:mb-3 leading-relaxed whitespace-pre-line line-clamp-3">
                     {processedProduct.description}
                   </p>
                 )}
@@ -407,15 +407,15 @@ const Landing = () => {
                   <div className="flex items-center justify-between">
                     <div className="flex flex-col items-start">
                       <div className="flex flex-col items-start">
-                        <Badge variant="secondary" className="text-base sm:text-lg font-bold px-3 py-1 bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-sm mb-1">
+                        <Badge variant="secondary" className="text-xs sm:text-sm md:text-base lg:text-lg font-bold px-2 sm:px-3 py-0.5 sm:py-1 bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-sm mb-1">
                           {formatPrice(processedProduct.selling_price, processedProduct.base_weight || undefined, processedProduct.weight_unit || undefined)}
                         </Badge>
                         {processedProduct.mrp > processedProduct.selling_price && (
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm text-gray-500">
+                          <div className="flex items-center gap-1 sm:gap-2 flex-wrap">
+                            <span className="text-xs sm:text-sm text-gray-500">
                               S.P.: <span className="line-through">₹{processedProduct.mrp}</span>
                             </span>
-                            <span className="text-xs text-green-600 font-medium">
+                            <span className="text-[10px] sm:text-xs text-green-600 font-medium">
                               Save ₹{processedProduct.mrp - processedProduct.selling_price}
                             </span>
                           </div>
@@ -429,20 +429,22 @@ const Landing = () => {
                     )}
                   </div>
                   
-                  <div className="flex items-center justify-center text-xs text-amber-600">
+                  <div className="flex items-center justify-center text-[10px] sm:text-xs text-amber-600">
                     <div className="flex items-center space-x-1">
-                      <Clock className="h-3 w-3" />
+                      <Clock className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
                       <span>Fresh Daily</span>
                     </div>
                   </div>
-                  <div className="mt-3 flex">
+                  <div className="mt-2 sm:mt-3 flex">
                     <Button 
                       variant="outline" 
                       size="sm"
                       onClick={(e) => { e.stopPropagation(); addToCart(processedProduct); }}
-                      className="w-full"
+                      className="w-full text-xs sm:text-sm py-1.5 sm:py-2"
                     >
-                      <ShoppingCart className="w-3 h-3 mr-2" /> Add to Cart
+                      <ShoppingCart className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" /> 
+                      <span className="hidden sm:inline">Add to Cart</span>
+                      <span className="sm:hidden">Add</span>
                     </Button>
                   </div>
                 </div>
@@ -1096,27 +1098,15 @@ const Landing = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 dark:from-amber-900 dark:via-yellow-900 dark:to-orange-900">
-      {/* Mobile Navigation Header */}
+      {/* Responsive Navigation Header */}
       <header className="bg-[#FEED95] backdrop-blur-sm border-b border-amber-200 sticky top-0 z-50 shadow-sm">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            {/* Left side - Empty for balance */}
-            <div className="w-10"></div>
-            
-            {/* Centered Logo */}
-            <div className="flex-1 flex justify-center">
-              <img 
-                src="/lovable-uploads/621d91fb-0a7a-4b83-b539-e0ecd76fb97d.png" 
-                alt="Priyum Bakehouse Logo" 
-                className="h-16 w-auto"
-              />
-            </div>
-
-            {/* Right side - Menu Button */}
-            <div className="w-10 flex justify-end">
+        <div className="container mx-auto px-4 py-3 md:py-4 lg:py-5">
+          <div className="relative flex items-center justify-between min-h-[64px] md:min-h-[80px]">
+            {/* Left side - Menu Button (Mobile only) */}
+            <div className="flex-shrink-0 md:hidden">
               <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
                 <SheetTrigger asChild>
-                  <Button variant="ghost" size="icon" className="sm:hidden">
+                  <Button variant="ghost" size="icon">
                     <Menu className="h-6 w-6 text-amber-800" />
                   </Button>
                 </SheetTrigger>
@@ -1167,13 +1157,13 @@ const Landing = () => {
                           <span>priyum.orders@gmail.com</span>
                         </a>
                         <a
-                          href="https://www.instagram.com/priyumbakery?igsh=MW5oZHdvOTM3bnRwcw=="
+                          href="https://www.instagram.com/priyum.in?igsh=MW5oZHdvOTM3bnRwcw=="
                           target="_blank"
                           rel="noopener noreferrer"
                           className="flex items-center space-x-3 text-amber-700 hover:text-amber-600 transition-colors"
                         >
                           <Instagram className="h-4 w-4" />
-                          <span>@priyumbakery</span>
+                          <span>@priyum.in</span>
                         </a>
                       </div>
                     </div>
@@ -1214,6 +1204,18 @@ const Landing = () => {
                 </SheetContent>
               </Sheet>
             </div>
+            
+            {/* Centered Logo - Responsive sizing for mobile and desktop */}
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[180px] sm:max-w-[220px] md:max-w-[260px] lg:max-w-[300px] xl:max-w-[340px] px-4 flex items-center justify-center">
+              <img 
+                src="/lovable-uploads/621d91fb-0a7a-4b83-b539-e0ecd76fb97d.png" 
+                alt="Priyum Bakehouse Logo" 
+                className="w-full h-auto object-contain max-h-[56px] sm:max-h-[64px] md:max-h-[72px] lg:max-h-[80px]"
+              />
+            </div>
+
+            {/* Right side - Spacer for balance (Mobile) / Desktop navigation can go here */}
+            <div className="flex-shrink-0 w-10 md:w-auto"></div>
           </div>
         </div>
       </header>
@@ -1394,97 +1396,142 @@ const Landing = () => {
             </div>
           </div>
         )}
-        {/* Base Category Navigation with Hover Dropdowns */}
+        {/* Responsive Category Navigation - Optimized for Mobile & Desktop */}
         {baseCategories.length > 0 && (
-          <div className="mb-8 w-full border-b border-gray-200 pb-2">
-            <NavigationMenu className="w-full">
-              <NavigationMenuList className="flex flex-nowrap justify-start items-center gap-0 overflow-x-auto w-full">
-                {baseCategories.map((baseCategory) => {
-                  const childCategories = categories.filter(cat => cat.base_category_id === baseCategory.id);
-                  return (
-                    <NavigationMenuItem key={baseCategory.id} className="flex-shrink-0">
-                      {childCategories.length > 0 ? (
-                        <>
-                          <NavigationMenuTrigger 
-                            ref={(el) => {
-                              if (el) {
-                                navigationMenuRefs.current[baseCategory.id] = el;
-                              }
-                            }}
-                            onClick={(e) => handleMobileBaseCategoryClick(baseCategory.id, e)}
-                            className={`${navigationMenuTriggerStyle()} ${
-                              selectedBaseCategory === baseCategory.id
-                                ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-md'
-                                : 'bg-transparent hover:bg-amber-50 text-gray-800'
-                            } font-medium px-5 py-3 text-sm uppercase tracking-wide whitespace-nowrap rounded-lg transition-all duration-200 [&>svg]:hidden cursor-pointer`}
-                          >
-                            {baseCategory.display_name}
-                          </NavigationMenuTrigger>
-                          <NavigationMenuContent>
-                            <div className="p-2 min-w-[220px]">
-                              <div className="grid gap-0.5">
-                                {childCategories.map((category) => (
-                                  <button
-                                    key={category.id}
-                                    onClick={(e) => {
-                                      e.preventDefault();
-                                      e.stopPropagation();
-                                      
-                                      // Close dropdown immediately
-                                      setOpenBaseCategoryDropdown(null);
-                                      
-                                      // Force close NavigationMenu by dispatching Escape key
-                                      setTimeout(() => {
-                                        const triggerRef = navigationMenuRefs.current[baseCategory.id];
-                                        if (triggerRef) {
-                                          // Dispatch escape key to close the dropdown
-                                          const escapeEvent = new KeyboardEvent('keydown', {
-                                            key: 'Escape',
-                                            code: 'Escape',
-                                            keyCode: 27,
-                                            which: 27,
-                                            bubbles: true,
-                                            cancelable: true
-                                          });
-                                          triggerRef.dispatchEvent(escapeEvent);
-                                          // Also blur to ensure it closes
-                                          triggerRef.blur();
-                                        }
-                                      }, 0);
-                                      
-                                      handleBaseCategoryChange(baseCategory.id);
-                                      handleCategoryChange(category.id);
-                                    }}
-                                    className={`text-left px-4 py-2.5 rounded-lg text-sm transition-colors w-full ${
-                                      selectedCategory === category.id
-                                        ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white font-semibold shadow-sm'
-                                        : 'hover:bg-amber-50 text-gray-700'
-                                    }`}
-                                  >
-                                    {category.display_name}
-                                  </button>
-                                ))}
-                              </div>
-                            </div>
-                          </NavigationMenuContent>
-                        </>
-                      ) : (
-                        <button
-                          onClick={() => handleBaseCategoryChange(baseCategory.id)}
-                          className={`${navigationMenuTriggerStyle()} ${
-                            selectedBaseCategory === baseCategory.id
-                              ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-md'
-                              : 'bg-transparent hover:bg-amber-50 text-gray-800'
-                          } font-medium px-5 py-3 text-sm uppercase tracking-wide whitespace-nowrap rounded-lg transition-all duration-200`}
-                        >
-                          {baseCategory.display_name}
-                        </button>
-                      )}
-                    </NavigationMenuItem>
-                  );
-                })}
-              </NavigationMenuList>
-            </NavigationMenu>
+          <div className="mb-6 md:mb-8 w-full">
+            <div className="relative">
+              <NavigationMenu className="w-full">
+                {/* Mobile: Horizontal Scroll | Desktop: Flexible Layout */}
+                <div className="overflow-x-auto md:overflow-x-visible scrollbar-hide scroll-smooth pb-2 md:pb-0">
+                  <NavigationMenuList className="flex items-center gap-2 md:gap-3 min-w-max md:min-w-0 md:flex-wrap md:justify-start">
+                    {baseCategories.map((baseCategory) => {
+                      const childCategories = categories.filter(cat => cat.base_category_id === baseCategory.id);
+                      const isActive = selectedBaseCategory === baseCategory.id;
+                      
+                      return (
+                        <NavigationMenuItem key={baseCategory.id} className="flex-shrink-0 list-none md:flex-shrink">
+                          {childCategories.length > 0 ? (
+                            <>
+                              <NavigationMenuTrigger
+                                ref={(el) => {
+                                  if (el) {
+                                    navigationMenuRefs.current[baseCategory.id] = el;
+                                  }
+                                }}
+                                onClick={(e) => handleMobileBaseCategoryClick(baseCategory.id, e)}
+                                className={`
+                                  relative rounded-full font-semibold
+                                  whitespace-nowrap transition-all duration-300 ease-out
+                                  transform active:scale-95 md:active:scale-100
+                                  border-0 shadow-none bg-transparent hover:bg-transparent
+                                  p-0 h-auto
+                                  /* Mobile Styles */
+                                  px-4 py-2.5 text-xs
+                                  /* Desktop Styles */
+                                  md:px-6 md:py-3 md:text-sm
+                                  ${
+                                    isActive
+                                      ? 'bg-gradient-to-r from-amber-500 via-amber-600 to-orange-500 text-white shadow-lg shadow-amber-500/30 scale-105 md:scale-100 md:hover:scale-105'
+                                      : 'bg-white/80 backdrop-blur-sm text-amber-900 border border-amber-200/50 hover:bg-amber-50 hover:border-amber-300 hover:shadow-md md:hover:shadow-lg'
+                                  }
+                                  focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2
+                                  [&>svg]:hidden
+                                `}
+                              >
+                                <span className="relative z-10">{baseCategory.display_name}</span>
+                                {isActive && (
+                                  <span className="absolute inset-0 rounded-full bg-gradient-to-r from-amber-400 to-orange-400 opacity-75 blur-sm -z-0"></span>
+                                )}
+                              </NavigationMenuTrigger>
+                              <NavigationMenuContent className="md:mt-2">
+                                <div className="p-3 md:p-4 min-w-[240px] md:min-w-[280px] bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-amber-100/50">
+                                  <div className="space-y-1 md:space-y-2">
+                                    {childCategories.map((category) => (
+                                      <button
+                                        key={category.id}
+                                        onClick={(e) => {
+                                          e.preventDefault();
+                                          e.stopPropagation();
+                                          
+                                          setOpenBaseCategoryDropdown(null);
+                                          
+                                          setTimeout(() => {
+                                            const triggerRef = navigationMenuRefs.current[baseCategory.id];
+                                            if (triggerRef) {
+                                              const escapeEvent = new KeyboardEvent('keydown', {
+                                                key: 'Escape',
+                                                code: 'Escape',
+                                                keyCode: 27,
+                                                which: 27,
+                                                bubbles: true,
+                                                cancelable: true
+                                              });
+                                              triggerRef.dispatchEvent(escapeEvent);
+                                              triggerRef.blur();
+                                            }
+                                          }, 0);
+                                          
+                                          handleBaseCategoryChange(baseCategory.id);
+                                          handleCategoryChange(category.id);
+                                        }}
+                                        className={`
+                                          w-full text-left rounded-xl font-medium
+                                          transition-all duration-200
+                                          /* Mobile Styles */
+                                          px-3 py-2.5 text-xs
+                                          /* Desktop Styles */
+                                          md:px-4 md:py-3 md:text-sm
+                                          ${
+                                            selectedCategory === category.id
+                                              ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-md transform scale-[1.02] md:hover:scale-[1.03]'
+                                              : 'text-amber-900 hover:bg-amber-50 hover:text-amber-700 active:scale-95 md:active:scale-100 md:hover:scale-[1.01]'
+                                          }
+                                          focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-1
+                                        `}
+                                      >
+                                        {category.display_name}
+                                      </button>
+                                    ))}
+                                  </div>
+                                </div>
+                              </NavigationMenuContent>
+                            </>
+                          ) : (
+                            <button
+                              onClick={() => handleBaseCategoryChange(baseCategory.id)}
+                              className={`
+                                relative rounded-full font-semibold
+                                whitespace-nowrap transition-all duration-300 ease-out
+                                transform active:scale-95 md:active:scale-100
+                                /* Mobile Styles */
+                                px-4 py-2.5 text-xs
+                                /* Desktop Styles */
+                                md:px-6 md:py-3 md:text-sm
+                                ${
+                                  isActive
+                                    ? 'bg-gradient-to-r from-amber-500 via-amber-600 to-orange-500 text-white shadow-lg shadow-amber-500/30 scale-105 md:scale-100 md:hover:scale-105'
+                                    : 'bg-white/80 backdrop-blur-sm text-amber-900 border border-amber-200/50 hover:bg-amber-50 hover:border-amber-300 hover:shadow-md md:hover:shadow-lg'
+                                }
+                                focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2
+                              `}
+                            >
+                              <span className="relative z-10">{baseCategory.display_name}</span>
+                              {isActive && (
+                                <span className="absolute inset-0 rounded-full bg-gradient-to-r from-amber-400 to-orange-400 opacity-75 blur-sm -z-0"></span>
+                              )}
+                            </button>
+                          )}
+                        </NavigationMenuItem>
+                      );
+                    })}
+                  </NavigationMenuList>
+                </div>
+              </NavigationMenu>
+              
+              {/* Desktop: Subtle gradient fade indicators (hidden on mobile) */}
+              <div className="hidden md:block absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-amber-50 via-amber-50/50 to-transparent pointer-events-none opacity-0 transition-opacity duration-300"></div>
+              <div className="hidden md:block absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-amber-50 via-amber-50/50 to-transparent pointer-events-none opacity-0 transition-opacity duration-300"></div>
+            </div>
           </div>
         )}
         
@@ -1560,9 +1607,9 @@ const Landing = () => {
                   {selectedProduct.description && (
                     <div>
                       <h3 className="text-lg font-semibold text-amber-800 mb-2">Description</h3>
-                      <p className="text-amber-700 leading-relaxed">
+                      <div className="text-amber-700 leading-relaxed whitespace-pre-wrap font-normal">
                         {selectedProduct.description}
-                      </p>
+                      </div>
                     </div>
                   )}
 
@@ -1570,9 +1617,9 @@ const Landing = () => {
                   {selectedProduct.info && (
                     <div>
                       <h3 className="text-lg font-semibold text-amber-800 mb-2">Additional Information</h3>
-                      <p className="text-amber-700 leading-relaxed">
+                      <div className="text-amber-700 leading-relaxed whitespace-pre-wrap font-normal">
                         {selectedProduct.info}
-                      </p>
+                      </div>
                     </div>
                   )}
 
@@ -1920,13 +1967,13 @@ const Landing = () => {
               </a>
               
               <a
-                href="https://www.instagram.com/priyumbakery?igsh=MW5oZHdvOTM3bnRwcw=="
+                href="https://www.instagram.com/priyum.in?igsh=MW5oZHdvOTM3bnRwcw=="
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-3 text-amber-800 hover:text-amber-600 transition-all duration-200 p-3 rounded-lg hover:bg-amber-50/70 backdrop-blur-sm"
               >
                 <Instagram className="h-5 w-5 sm:h-6 sm:w-6" />
-                <span className="font-semibold text-base sm:text-lg">@priyumbakery</span>
+                <span className="font-semibold text-base sm:text-lg">@priyum.in</span>
               </a>
             </div>
             
