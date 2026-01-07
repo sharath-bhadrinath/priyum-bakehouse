@@ -1979,7 +1979,7 @@ const Landing = () => {
             
             <div className="pt-6 border-t border-amber-300/50">
               <p className="text-amber-700 text-sm sm:text-base">
-                © 2025 {"PRIYUM CAKES & BAKES"}. Made with ❤️
+                © 2026 {"PRIYUM CAKES & BAKES"}. Made with ❤️
               </p>
             </div>
           </div>
