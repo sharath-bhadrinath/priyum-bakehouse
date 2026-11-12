@@ -14,6 +14,57 @@ export type Database = {
   }
   public: {
     Tables: {
+      base_categories: {
+        Row: {
+          created_at: string
+          display_name: string
+          id: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_name: string
+          id?: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string
+          id?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      categories: {
+        Row: {
+          base_category_id: string | null
+          created_at: string
+          display_name: string
+          id: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          base_category_id?: string | null
+          created_at?: string
+          display_name: string
+          id?: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          base_category_id?: string | null
+          created_at?: string
+          display_name?: string
+          id?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       invoice_settings: {
         Row: {
           business_name: string
@@ -110,6 +161,7 @@ export type Database = {
           customer_email: string
           customer_name: string
           customer_phone: string | null
+          delivery_date: string | null
           discount_amount: number | null
           id: string
           order_date: string
@@ -129,6 +181,7 @@ export type Database = {
           customer_email: string
           customer_name: string
           customer_phone?: string | null
+          delivery_date?: string | null
           discount_amount?: number | null
           id?: string
           order_date?: string
@@ -148,6 +201,7 @@ export type Database = {
           customer_email?: string
           customer_name?: string
           customer_phone?: string | null
+          delivery_date?: string | null
           discount_amount?: number | null
           id?: string
           order_date?: string
@@ -165,13 +219,17 @@ export type Database = {
         Row: {
           base_weight: number | null
           category: string | null
+          category_id: string | null
           created_at: string
           description: string | null
           id: string
           image: string | null
           info: string | null
+          mrp: number | null
           name: string
           price: number
+          selling_price: number
+          site_display: boolean
           stock: number | null
           updated_at: string
           weight_options: Json | null
@@ -180,13 +238,17 @@ export type Database = {
         Insert: {
           base_weight?: number | null
           category?: string | null
+          category_id?: string | null
           created_at?: string
           description?: string | null
           id?: string
           image?: string | null
           info?: string | null
+          mrp?: number | null
           name: string
           price: number
+          selling_price?: number
+          site_display?: boolean
           stock?: number | null
           updated_at?: string
           weight_options?: Json | null
@@ -195,13 +257,17 @@ export type Database = {
         Update: {
           base_weight?: number | null
           category?: string | null
+          category_id?: string | null
           created_at?: string
           description?: string | null
           id?: string
           image?: string | null
           info?: string | null
+          mrp?: number | null
           name?: string
           price?: number
+          selling_price?: number
+          site_display?: boolean
           stock?: number | null
           updated_at?: string
           weight_options?: Json | null
@@ -307,7 +373,17 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      track_order: {
+        Args: { p_order_id: string }
+        Returns: {
+          id: string
+          customer_name: string
+          status: string | null
+          shipment_number: string | null
+          total: number
+          created_at: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
