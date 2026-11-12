@@ -120,7 +120,8 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
     /* Improve touch scrolling on mobile */
     -webkit-overflow-scrolling: touch;
-    overscroll-behavior: contain;
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
   }
 
   /* Improve text rendering on mobile */
@@ -129,10 +130,44 @@ All colors MUST be HSL.
     text-size-adjust: 100%;
   }
 
-  /* Better touch targets for mobile */
-  button, a, [role="button"] {
+  /* Legacy staff pages: blanket 44px touch targets. The storefront and the
+     redesigned staff pages (admin, sign-in) set a class on <html> and size
+     their own controls. */
+  html:not(.storefront):not(.staff) button,
+  html:not(.storefront):not(.staff) a,
+  html:not(.storefront):not(.staff) [role="button"] {
     min-height: 44px;
     min-width: 44px;
+  }
+
+  /* Staff theme: maps the shadcn tokens onto the storefront brand palette so
+     every primitive (buttons, inputs, dialogs, selects) matches without
+     per-component overrides. Set on <html> because dialogs portal to <body>. */
+  html.staff {
+    --background: 45 100% 96%; /* brand cream */
+    --foreground: 20 63% 16%; /* brand cocoa */
+    --card: 0 0% 100%;
+    --card-foreground: 20 63% 16%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 20 63% 16%;
+    --primary: 20 63% 16%;
+    --primary-foreground: 45 100% 96%;
+    --secondary: 43 68% 89%; /* brand oat */
+    --secondary-foreground: 20 63% 16%;
+    --muted: 43 60% 93%;
+    --muted-foreground: 22 22% 38%;
+    --accent: 43 68% 89%;
+    --accent-foreground: 20 63% 16%;
+    --destructive: 352 70% 50%; /* brand berry */
+    --destructive-foreground: 0 0% 100%;
+    --border: 32 30% 86%;
+    --input: 32 28% 78%;
+    --ring: 30 65% 48%; /* brand crust */
+    --radius: 0.75rem;
+  }
+
+  h1, h2, h3, .font-display {
+    font-feature-settings: "ss01";
   }
 
   /* Improve focus states for accessibility */
@@ -232,49 +267,6 @@ All colors MUST be HSL.
     min-height: 100dvh;
   }
 
-  /* True Elements style scrolling banner */
-  .scrolling-banner-wrapper {
-    position: relative;
-    width: 100%;
-    height: 50px;
-    overflow: hidden;
-  }
-
-  .scrolling-banner-track {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    align-items: center;
-    white-space: nowrap;
-    animation: scroll-banner-true-elements 20s linear infinite;
-  }
-
-  .scrolling-banner-item {
-    padding: 0 20px;
-    font-size: 14px;
-    font-weight: 500;
-    color: white;
-    flex-shrink: 0;
-  }
-
-  .scrolling-banner-separator {
-    padding: 0 10px;
-    font-size: 14px;
-    font-weight: bold;
-    color: rgba(255, 255, 255, 0.7);
-    flex-shrink: 0;
-  }
-
-  @keyframes scroll-banner-true-elements {
-    0% {
-      transform: translateX(0);
-    }
-    100% {
-      transform: translateX(-50%);
-    }
-  }
-
   @keyframes whisk-rotate {
     0% {
       transform: rotate(0deg);
@@ -344,20 +336,56 @@ All colors MUST be HSL.
       transform: scale(0.9) translateY(-20px);
     }
   }
+}
 
-  @media (min-width: 640px) {
-    .scrolling-banner-wrapper {
-      height: 60px;
+/* ---------- Storefront ---------- */
+@layer utilities {
+  /* Seamless marquee: the track holds two copies of its content. */
+  .marquee-track {
+    animation: marquee 28s linear infinite;
+  }
+  .marquee:hover .marquee-track {
+    animation-play-state: paused;
+  }
+
+  /* Entrance animation for cards; delay comes from the --i custom property. */
+  .rise-in {
+    animation: rise-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(min(var(--i, 0), 11) * 45ms);
+  }
+
+  .bump {
+    animation: bump 0.35s ease-out;
+  }
+
+  .pb-safe {
+    padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+  }
+
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
     }
-    
-    .scrolling-banner-item {
-      font-size: 16px;
-      padding: 0 25px;
+  }
+
+  @keyframes rise-in {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
     }
-    
-    .scrolling-banner-separator {
-      font-size: 16px;
-      padding: 0 15px;
+  }
+
+  @keyframes bump {
+    40% {
+      transform: scale(1.25);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track,
+    .rise-in,
+    .bump {
+      animation: none;
     }
   }
 }

@@ -26,7 +26,22 @@ export default {
 			'2xl': '1536px',
 		},
 		extend: {
+			fontFamily: {
+				sans: ['"DM Sans"', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'],
+				display: ['Fraunces', 'Georgia', 'Cambria', 'serif'],
+			},
 			colors: {
+				/* Storefront brand palette, sampled from the logo */
+				brand: {
+					butter: '#FEED95',
+					cream: '#FFFAEB',
+					oat: '#F6EBCF',
+					crust: '#C97A2B',
+					caramel: '#9A5518',
+					cocoa: '#43200F',
+					berry: '#D7263D',
+					leaf: '#2F7D4F',
+				},
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
